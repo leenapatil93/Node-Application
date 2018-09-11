@@ -19,23 +19,28 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="employee in employeeList">
-                        <td>{{employee.emp_name}}</td>
-                        <td>{{employee.emp_id}}</td>
-                        <td>{{employee.designation}}</td>
+                        <td ng-if="!isEdit || employee._id !== empId">{{employee.emp_name}}</td>
+                        <td ng-if="!isEdit || employee._id !== empId">{{employee.emp_id}}</td>
+                        <td ng-if="!isEdit || employee._id !== empId">{{employee.designation}}</td>
+                        <td ng-if="isEdit && employee._id === empId"><input class="form-control" ng-model="employeeUpdateObj.emp_name"></td>
+                        <td ng-if="isEdit && employee._id === empId"><input class="form-control" ng-model="employeeUpdateObj.emp_id"></td>
+                        <td ng-if="isEdit && employee._id === empId"><input class="form-control" ng-model="employeeUpdateObj.designation"></td>
                         <td><button class="btn" ng-click="removeEmoployee(employee._id)">Remove</button></td>
-                        <td><button class="btn" ng-click="editEmoployee(employee._id)">Edit</button></td>
+                        <td ng-if="!isEdit || employee._id !== empId"><button class="btn" ng-click="editEmoployee(employee._id)">Edit</button></td>
+                        <td ng-if="isEdit && employee._id === empId"><button class="btn" ng-click="updateEmployeeDetails()">Update</button></td>
+                        <td><button class="btn" ng-click="getAddress($index+1)">Get Address</button></td>
                     </tr>
-                    <tr>
+                    <tr ng-if="!isEdit">
                         <td><input class="form-control" ng-model="employeeObj.emp_name"></td>
                         <td><input class="form-control" ng-model="employeeObj.emp_id"></td>
                         <td><input class="form-control" ng-model="employeeObj.designation"></td>
                         <td><button class="btn btn-primary" ng-click="addEmployeeDetails()">Add</button></td>
-                        <td><button class="btn btn-primary" ng-click="updateEmployeeDetails()">Update</button></td>
                     </tr>
                 </tbody>
             </table>
+            {{address}}
         </div>
     </body>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
-    <script src="controllers/employeeController.js"></script>
+    <script src="controllers/employee.controller.js"></script>
 </html>

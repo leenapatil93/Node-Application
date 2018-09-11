@@ -1,4 +1,3 @@
-const Joi = require('joi');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongojs = require('mongojs');
@@ -8,14 +7,8 @@ const app = express();
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 
-app.get('/',(req, res) => {
-    res.send('Get request successful!!');
-});
-
 app.get('/api/employees', (req, res) => {
-   // res.send(employees);
    db.employees.find(function(error, docs){
-       console.log(docs);
        res.json(docs);
    });
 });
@@ -28,9 +21,14 @@ app.get('/api/employees/:empId', (req, res) => {
     });
 });
 
+app.get('https://jsonplaceholder.typicode.com/users/:index', (req, res)=>{
+    const index = req.params.index; 
+    console.log('get index'+index);
+    res.send();
+});
+
 //Post API for adding name and id 
 app.post('/api/addEmployee', (req, res) => {
-    console.log(req.body);
     const {error} = Joi.validate(req.body);
     if(error){
         res.status(400).send(result.error.details[0].message);
@@ -45,7 +43,7 @@ app.put('/api/employees/:empId', (req, res) => {
     const id = req.params.empId; 
     console.log(req.body.emp_name);
     db.employees.findAndModify({query:{_id: mongojs.ObjectId(id)},
-    update:{$set:{emp_name:req.body.emp_name, emp_id: req.body.emp_id}},
+    update:{$set:{emp_name:req.body.emp_name, emp_id: req.body.emp_id, designation:req.body.designation}},
     new:true},
     function(error, docs){
         res.json(docs);
@@ -60,13 +58,6 @@ app.delete('/api/removeEmployee/:id', (req, res) => {
         res.json(docs);
     });
 });
-
-function validateBody(employeeName){
-    const schema = {
-        name : Joi.string().min(3).required()
-    }
-    return Joi.validate(employeeName, schema);
-}
 
 //for dynamic port
 const PORT = process.env.PORT || 3000;

@@ -1,34 +1,41 @@
 var myApp = angular.module('empApp', []);
 myApp.controller('empCtrl', ['$scope', '$http', function($scope, $http) {
+    $scope.isEdit = false;
+    $scope.employeeObj = {};
     var getEmployeeDetails = function(){
         $http.get('/api/employees').then(function(response){
             $scope.employeeList = response.data;
         });
     }
     getEmployeeDetails();
+    $scope.getAddress = function(index){
+        debugger;
+        $http.get('https://jsonplaceholder.typicode.com/users/'+index).then(function(response){
+            $scope.address = response.data;
+        });
+    }
     $scope.addEmployeeDetails = function(){
-        console.log($scope.employeeObj);
         $http.post('/api/addEmployee', $scope.employeeObj).then(function(response){
             $scope.employeeList.push(response.data);
+            $scope.employeeObj = {};
         });
     }
     $scope.removeEmoployee = function(id){
-        console.log(id);
         $http.delete('/api/removeEmployee/'+id).then(function(response){
             getEmployeeDetails();
         });
     }
     $scope.editEmoployee = function(id){
-        debugger;
+        $scope.isEdit = true;
+        $scope.empId = id;
         $http.get('/api/employees/'+id).then(function(response){
-            $scope.employeeObj = response.data;
+            $scope.employeeUpdateObj = response.data;
         });
     }
     $scope.updateEmployeeDetails = function(){
-        debugger;
-        console.log($scope.employeeObj._id);
-        $http.put('/api/employees/'+$scope.employeeObj._id, $scope.employeeObj).then(function(response){
+        $http.put('/api/employees/'+$scope.employeeUpdateObj._id, $scope.employeeUpdateObj).then(function(response){
             getEmployeeDetails();
+            $scope.isEdit = false;
         });
     }
 }]);

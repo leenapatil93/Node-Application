@@ -1,6 +1,6 @@
 show dbs - show all the database
 
-use emoployeeDatabase - create and switch to the employee database
+use employeeDatabase - create and switch to the employee database
 
 db - check current database
 
