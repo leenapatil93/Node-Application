@@ -1,0 +1,36 @@
+show dbs - show all the database
+
+use emoployeeDatabase - create and switch to the employee database
+
+db - check current database
+
+
+db.createUser({
+	user:"leena",
+	pwd:"leena",
+	roles: ["readWrite", "dbAdmin"]
+}); - Create user for db
+
+db.createCollection('employees'); - create a collection
+
+db.employees.insert({emp_name:"John", emp_id:1001}) - insert data into collection
+
+db.employees.find(); - see records  added into collection
+
+
+db.employees.insert([{emp_name:"John", emp_id:1001}, {emp_name:"Leena", emp_id:1002}]) - insert multiple data at a time into collection
+
+db.employees.update({emp_id:1001}, {emp_name:'Leena', emp_id:1001, emp_practice:'UI'}) -- update the existing data by id
+
+
+db.employees.update({emp_id:1001}, 
+{$set:{ emp_practice:'UI' }}) -- add ne values to the existing record by keeping all previous values same
+
+db.employees.update({emp_id:1001}, 
+{$unset:{emp_practice:'UI' }}) - removes the emp_practice field from the record by using $unset
+
+db.employees.update({emp_id:1004}, {emp_name:'Kirti', emp_id:1004}, {upsert:true}); -- check for updating existing record, if not found, add new record to the database
+
+db.employees.update({emp_id:1004},{$rename: {"emp_practice":"Practice"}}); -- Update the sepcific attribute key name by using $rename
+
+db.employees.remove({emp_id:1004}); -- remove the specific employee from the db table.
