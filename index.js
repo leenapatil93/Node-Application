@@ -8,13 +8,6 @@ const app = express();
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 
-const employees = [
-    {name:"Emp1", id:1001, designation:'UI Developer'},
-    {name:"Emp2", id:1002, designation:'Java Developer'},
-    {name:"Emp3", id:1003, designation:'Python Developer'},
-    {name:"Emp4", id:1004, designation:'SASS Developer'},
-    {name:"Emp5", id:1005, designation:'.Net Developer'}
-]
 app.get('/',(req, res) => {
     res.send('Get request successful!!');
 });
@@ -24,17 +17,15 @@ app.get('/api/employees', (req, res) => {
    db.employees.find(function(error, docs){
        console.log(docs);
        res.json(docs);
-   })
+   });
 });
 
 app.get('/api/employees/:empId', (req, res) => {
-    const employee = employees.find(emp => emp.id === parseInt(req.params.empId));
-    if(!employee){
-        res.status(404).send(`Employee with ID ${req.params.empId} not found`);
-        return;
-    }else{
-        res.send(employee);
-    }
+    const id = req.params.empId; 
+    console.log('get id'+id);
+    db.employees.findOne({_id: mongojs.ObjectId(id)}, function(error, docs){
+        res.json(docs);
+    });
 });
 
 //Post API for adding name and id 
@@ -51,17 +42,14 @@ app.post('/api/addEmployee', (req, res) => {
 
 //update existing employee name by using id
 app.put('/api/employees/:empId', (req, res) => {
-    const employee = employees.find(emp => emp.id === parseInt(req.params.empId));
-    if(!employee){
-        res.status(400).send(`no employee found with id ${req.param.empId}`);
-        return;
-    }
-    const { error } = Joi.validate(req.body);
-    if(error){
-        res.status(400).send(result.error.details[0].message);
-    }
-    employee.name = req.body.name;
-    res.send(employee);
+    const id = req.params.empId; 
+    console.log(req.body.emp_name);
+    db.employees.findAndModify({query:{_id: mongojs.ObjectId(id)},
+    update:{$set:{emp_name:req.body.emp_name, emp_id: req.body.emp_id}},
+    new:true},
+    function(error, docs){
+        res.json(docs);
+    });
 });
 
 //delete employee by employee id

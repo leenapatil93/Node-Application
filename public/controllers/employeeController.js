@@ -10,7 +10,7 @@ myApp.controller('empCtrl', ['$scope', '$http', function($scope, $http) {
         console.log($scope.employeeObj);
         $http.post('/api/addEmployee', $scope.employeeObj).then(function(response){
             $scope.employeeList.push(response.data);
-        })
+        });
     }
     $scope.removeEmoployee = function(id){
         console.log(id);
@@ -19,6 +19,16 @@ myApp.controller('empCtrl', ['$scope', '$http', function($scope, $http) {
         });
     }
     $scope.editEmoployee = function(id){
-
+        debugger;
+        $http.get('/api/employees/'+id).then(function(response){
+            $scope.employeeObj = response.data;
+        });
+    }
+    $scope.updateEmployeeDetails = function(){
+        debugger;
+        console.log($scope.employeeObj._id);
+        $http.put('/api/employees/'+$scope.employeeObj._id, $scope.employeeObj).then(function(response){
+            getEmployeeDetails();
+        });
     }
 }]);
