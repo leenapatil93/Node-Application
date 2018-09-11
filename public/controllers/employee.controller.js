@@ -11,7 +11,7 @@ myApp.controller('empCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.getAddress = function(index){
         debugger;
         $http.get('https://jsonplaceholder.typicode.com/users/'+index).then(function(response){
-            $scope.address = response.data;
+            $scope.address = response.data.address;
         });
     }
     $scope.addEmployeeDetails = function(){
