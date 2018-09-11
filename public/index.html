@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Employee App</title>
+        <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    </head>
+    <body ng-app="empApp" ng-controller="empCtrl">
+        <div class="container">
+            <h2>Employee App</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Employee ID</th>
+                        <th>Desination</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="employee in employeeList">
+                        <td>{{employee.emp_name}}</td>
+                        <td>{{employee.emp_id}}</td>
+                        <td>{{employee.designation}}</td>
+                        <td><button class="btn" ng-click="removeEmoployee(employee._id)">Remove</button></td>
+                        <td><button class="btn" ng-click="editEmoployee(employee._id)">Edit</button></td>
+                    </tr>
+                    <tr>
+                        <td><input class="form-control" ng-model="employeeObj.emp_name"></td>
+                        <td><input class="form-control" ng-model="employeeObj.emp_id"></td>
+                        <td><input class="form-control" ng-model="employeeObj.designation"></td>
+                        <td><button class="btn btn-primary" ng-click="addEmployeeDetails()">Add</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="controllers/employeeController.js"></script>
+</html>
