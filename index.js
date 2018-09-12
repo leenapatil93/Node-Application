@@ -40,10 +40,6 @@ app.get('/api/address/:index', (req, response)=>{
 
 //Post API for adding name and id 
 app.post('/api/addEmployee', (req, res) => {
-    const {error} = Joi.validate(req.body);
-    if(error){
-        res.status(400).send(result.error.details[0].message);
-    }
     db.employees.insert(req.body, function(err, docs){
         res.json(docs);
     });
