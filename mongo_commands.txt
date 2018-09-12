@@ -1,9 +1,16 @@
+
+md "\data\db" "\data\log" - Create database and log directories.
+
+"C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe" --dbpath="c:\data\db" - 
+Start your MongoDB database.
+
+"C:\Program Files\MongoDB\Server\4.0\bin\mongo.exe" - Connect to MongoDB.
+
 show dbs - show all the database
 
 use employeeDatabase - create and switch to the employee database
 
 db - check current database
-
 
 db.createUser({
 	user:"leena",
@@ -34,3 +41,5 @@ db.employees.update({emp_id:1004}, {emp_name:'Kirti', emp_id:1004}, {upsert:true
 db.employees.update({emp_id:1004},{$rename: {"emp_practice":"Practice"}}); -- Update the sepcific attribute key name by using $rename
 
 db.employees.remove({emp_id:1004}); -- remove the specific employee from the db table.
+
+db.employees.aggregate([{$lookup:{from:"departments",localField:"emp_id",foreignField:"emp_id",as:"data"}}]).pretty(); - Take data from two different collections

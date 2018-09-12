@@ -14,6 +14,7 @@
                         <th>Employee Name</th>
                         <th>Employee ID</th>
                         <th>Desination</th>
+                        <th>Department</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -22,9 +23,11 @@
                         <td ng-if="!isEdit || employee._id !== empId">{{employee.emp_name}}</td>
                         <td ng-if="!isEdit || employee._id !== empId">{{employee.emp_id}}</td>
                         <td ng-if="!isEdit || employee._id !== empId">{{employee.designation}}</td>
+                        <td ng-if="!isEdit || employee._id !== empId">{{employee.data[0].dept_name}}</td>
                         <td ng-if="isEdit && employee._id === empId"><input class="form-control" ng-model="employeeUpdateObj.emp_name"></td>
                         <td ng-if="isEdit && employee._id === empId"><input class="form-control" ng-model="employeeUpdateObj.emp_id"></td>
                         <td ng-if="isEdit && employee._id === empId"><input class="form-control" ng-model="employeeUpdateObj.designation"></td>
+                        <td ng-if="isEdit && employee._id === empId">{{employee.data[0].dept_name}}</td>
                         <td><button class="btn" ng-click="removeEmoployee(employee._id)">Remove</button></td>
                         <td ng-if="!isEdit || employee._id !== empId"><button class="btn" ng-click="editEmoployee(employee._id)">Edit</button></td>
                         <td ng-if="isEdit && employee._id === empId"><button class="btn" ng-click="updateEmployeeDetails()">Update</button></td>

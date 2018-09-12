@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongojs = require('mongojs');
-const db = mongojs('employeeDatabase', ['employees']);
+const db = mongojs('employeeDatabase', ['employees', 'departments']);
 const app = express();
 const http = require('http');
 
@@ -9,9 +9,15 @@ app.use(express.static(__dirname + "/lib"));
 app.use(bodyParser.json());
 
 app.get('/api/employees', (req, res) => {
-   db.employees.find(function(error, docs){
-       res.json(docs);
-   });
+    //    db.employees.find(function(error, docs){
+    //        res.json(docs);
+    //    });
+    // Find data from two different collection
+   db.employees.aggregate(
+       [{$lookup:{from:"departments",localField:"emp_id",foreignField:"emp_id",as:"data"}}], 
+       function(error, docs){
+          res.json(docs);
+       });
 });
 
 app.get('/api/employees/:empId', (req, res) => {
