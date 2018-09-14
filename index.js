@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongojs = require('mongojs');
-const db = mongojs('employeeDatabase', ['employees', 'departments']);
+const db = mongojs('employeeDatabase', ['employees', 'projects']);
 const app = express();
 const http = require('http');
 
@@ -14,12 +14,20 @@ app.get('/api/employees', (req, res) => {
     //    });
     // Find data from two different collection
    db.employees.aggregate(
-       [{$lookup:{from:"departments",localField:"emp_id",foreignField:"emp_id",as:"data"}}], 
+       [{$lookup:{from:"projects",localField:"project_id",foreignField:"project_id",as:"project_data"}}], 
        function(error, docs){
+           console.log(docs);
           res.json(docs);
        });
 });
 
+app.get('/api/project/:project_name', (req, res) =>{
+    const pname = req.params.project_name; 
+    db.projects.find({"project_name": pname}, function(error, docs){
+        console.log(docs);
+        res.json(docs);
+    });
+});
 app.get('/api/employees/:empId', (req, res) => {
     const id = req.params.empId; 
     db.employees.findOne({_id: mongojs.ObjectId(id)}, function(error, docs){
@@ -32,12 +40,10 @@ app.get('/api/address/:index', (req, response)=>{
     http.get('http://jsonplaceholder.typicode.com/users/'+index, function(res){
         var addressRes = "";
         res.on('data', function(data) {
-            console.log('data came');
             addressRes += data;
         });
         res.on('end', function() {
             var result = JSON.parse(addressRes);
-            console.log(result.address);
             var address =  result.address.suite + ", "+ result.address.street + ", " + result.address.city + ", "+result.address.zipcode;
             response.send(address);
         }); 
@@ -55,7 +61,7 @@ app.post('/api/addEmployee', (req, res) => {
 app.put('/api/employees/:empId', (req, res) => {
     const id = req.params.empId; 
     db.employees.findAndModify({query:{_id: mongojs.ObjectId(id)},
-    update:{$set:{emp_name:req.body.emp_name, emp_id: req.body.emp_id, designation:req.body.designation}},
+    update:{$set:{emp_name:req.body.emp_name, emp_id: req.body.emp_id, designation:req.body.designation, project_id:req.body.project_id}},
     new:true},
     function(error, docs){
         res.json(docs);
